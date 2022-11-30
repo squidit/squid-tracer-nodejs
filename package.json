@@ -1,0 +1,29 @@
+{
+  "name": "squid-tracer-nodejs",
+  "version": "1.0.0",
+  "description": "Lib que caputura traces (semelhante à um APM) utilizando OpenTelemetry e exporta os dados para o Google Cloud Trace",
+  "main": "squid_logger.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Henrique Martini <henrique.martini@squidit.com.br>",
+  "license": "ISC",
+  "dependencies": {
+    "@opentelemetry/api": "^1.3.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.35.0",
+    "@opentelemetry/instrumentation": "^0.34.0",
+    "@opentelemetry/sdk-metrics-base": "^0.27.0",
+    "@opentelemetry/sdk-trace-base": "^1.8.0",
+    "@opentelemetry/sdk-trace-node": "^1.8.0",
+    "squid-error": "file:libraries/squid-error-nodejs"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.1"
+  }
+}
