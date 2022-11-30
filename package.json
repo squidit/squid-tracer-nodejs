@@ -1,8 +1,8 @@
 {
-  "name": "squid-tracer-nodejs",
+  "name": "squid-tracer",
   "version": "1.0.0",
   "description": "Lib que caputura traces (semelhante à um APM) utilizando OpenTelemetry e exporta os dados para o Google Cloud Trace",
-  "main": "squid_logger.js",
+  "main": "squid_tracer.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
