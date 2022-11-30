@@ -61,7 +61,7 @@ function Configure (enabled, projectId, googleCloudCredentials, environment, app
 
     const exporter = new TraceExporter({
       projectId      : projectId,
-      resourceFilter : /^(service\.name|service\.version|deployment\.environment|host\.name)$/,
+      resourceFilter : /^(service\.name|service\.version|deployment\.environment|host\.name|service\.repository|service\.revision)$/,
       ...credentials
     });
 
@@ -72,7 +72,7 @@ function Configure (enabled, projectId, googleCloudCredentials, environment, app
         [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT] : environment,
         [SemanticResourceAttributes.HOST_NAME]              : os.hostname(),
         SERVICE_REPOSITORY                                  : applicationRepository,
-        SERVICE_REVISION_ID                                 : applicationRevisionId
+        SERVICE_REVISION                                    : applicationRevisionId
       })
     });
 
