@@ -4,12 +4,12 @@ const OpenTelemetryApi                = require('@opentelemetry/api');
 const { NodeTracerProvider }          = require('@opentelemetry/sdk-trace-node');
 const { Resource }                    = require('@opentelemetry/resources');
 const { BatchSpanProcessor }          = require('@opentelemetry/sdk-trace-base');
-const { TraceExporter }              = require('@google-cloud/opentelemetry-cloud-trace-exporter');
+const { TraceExporter }               = require('@google-cloud/opentelemetry-cloud-trace-exporter');
 const { registerInstrumentations }    = require('@opentelemetry/instrumentation');
 const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
 const { SemanticResourceAttributes }  = require('@opentelemetry/semantic-conventions');
 
-const SquidError                      = require('./libraries/squid-error-nodejs/squid_error');
+const { SquidError }                  = require('./libraries/squid-error-nodejs/squid_error');
 
 const squidTracerUniqueSymbol = Symbol.for('squidTracerSingleton');
 const globalSymbols = Object.getOwnPropertySymbols(global);
