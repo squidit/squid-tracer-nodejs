@@ -8,6 +8,7 @@ const { TraceExporter }               = require('@google-cloud/opentelemetry-clo
 const { registerInstrumentations }    = require('@opentelemetry/instrumentation');
 const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
 const { SemanticResourceAttributes }  = require('@opentelemetry/semantic-conventions');
+const {SocketIoInstrumentation}       = require("@opentelemetry/instrumentation-socket.io");
 
 const { SquidError }                  = require('./libraries/squid-error-nodejs/squid_error');
 
@@ -82,11 +83,8 @@ function Configure (enabled, projectId, googleCloudCredentials, environment, app
 
     registerInstrumentations({
       instrumentations : [
-        getNodeAutoInstrumentations({
-          '@opentelemetry/instrumentation-mongodb' : {
-            enhancedDatabaseReporting : true
-          }
-        })
+        getNodeAutoInstrumentations({'@opentelemetry/instrumentation-mongodb' : {enhancedDatabaseReporting : true},}),
+        new SocketIoInstrumentation({})
       ],
 
       tracerProvider : provider
