@@ -19,7 +19,7 @@ let tracerSingleton;
 
 function Configure (enabled, projectId, googleCloudCredentials, environment, applicationName, version, applicationRepository, applicationRevisionId)
 {
-  if (enabled !== true)
+  if (enabled !== true && enabled !== 'true')
     return;
 
   const hasSymbol = (globalSymbols.indexOf(squidTracerUniqueSymbol) > -1);
