@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const os                              = require('os');
 
 const OpenTelemetryApi                = require('@opentelemetry/api');
@@ -8,7 +9,7 @@ const { TraceExporter }               = require('@google-cloud/opentelemetry-clo
 const { registerInstrumentations }    = require('@opentelemetry/instrumentation');
 const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
 const { SemanticResourceAttributes }  = require('@opentelemetry/semantic-conventions');
-const {SocketIoInstrumentation}       = require("@opentelemetry/instrumentation-socket.io");
+const { SocketIoInstrumentation }       = require('@opentelemetry/instrumentation-socket.io');
 
 const { SquidError }                  = require('./libraries/squid-error-nodejs/squid_error');
 
@@ -20,7 +21,12 @@ let tracerSingleton;
 function Configure (enabled, projectId, googleCloudCredentials, environment, applicationName, version, applicationRepository, applicationRevisionId)
 {
   if (enabled !== true && enabled !== 'true')
+  {
+    console.log('Squid Tracer is DISABLED. Enabled flag is set to: ', enabled);
     return;
+  }
+  else
+    console.log('Squid Tracer is ENABLED. Enabled flag is set to: ', enabled);
 
   const hasSymbol = (globalSymbols.indexOf(squidTracerUniqueSymbol) > -1);
 
@@ -83,7 +89,7 @@ function Configure (enabled, projectId, googleCloudCredentials, environment, app
 
     registerInstrumentations({
       instrumentations : [
-        getNodeAutoInstrumentations({'@opentelemetry/instrumentation-mongodb' : {enhancedDatabaseReporting : true},}),
+        getNodeAutoInstrumentations({ '@opentelemetry/instrumentation-mongodb' : { enhancedDatabaseReporting : true } }),
         new SocketIoInstrumentation({})
       ],
 
