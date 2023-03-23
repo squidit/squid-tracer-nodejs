@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const os                              = require('os');
 
 const OpenTelemetryApi                = require('@opentelemetry/api');
@@ -9,77 +8,35 @@ const { TraceExporter }               = require('@google-cloud/opentelemetry-clo
 const { registerInstrumentations }    = require('@opentelemetry/instrumentation');
 const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
 const { SemanticResourceAttributes }  = require('@opentelemetry/semantic-conventions');
-const { SocketIoInstrumentation }       = require('@opentelemetry/instrumentation-socket.io');
-
-const { SquidError }                  = require('./libraries/squid-error-nodejs/squid_error');
 
 const squidTracerUniqueSymbol = Symbol.for('squidTracerSingleton');
 const globalSymbols = Object.getOwnPropertySymbols(global);
 
-let tracerSingleton;
+const SquidObservabilityConfigs = require('./libraries/squid-observability-configs/squid_observability_configs');
 
-function Configure (enabled, projectId, googleCloudCredentials, environment, applicationName, version, applicationRepository, applicationRevisionId)
+function Configure (enabled)
 {
-  if (enabled !== true && enabled !== 'true')
-  {
-    console.log('Squid Tracer is DISABLED. Enabled flag is set to: ', enabled);
+  if (enabled !== true)
     return;
-  }
-  else
-    console.log('Squid Tracer is ENABLED. Enabled flag is set to: ', enabled);
 
   const hasSymbol = (globalSymbols.indexOf(squidTracerUniqueSymbol) > -1);
 
   if (!hasSymbol)
   {
-    let credentials = {};
-
-    if (typeof googleCloudCredentials === 'string' || googleCloudCredentials instanceof String)
-    {
-      try
-      {
-        credentials = {
-          credentials : JSON.parse(googleCloudCredentials)
-        };
-      }
-      catch (error)
-      {
-        credentials = {
-          keyFile     : googleCloudCredentials,
-          keyFilename : googleCloudCredentials
-        };
-      }
-    }
-    else if (typeof googleCloudCredentials === 'object' && googleCloudCredentials !== null)
-    {
-      credentials = {
-        credentials : googleCloudCredentials
-      };
-    }
-    else
-    {
-      throw SquidError.Create({
-        message : 'Invalid credentials provided for the Squid Tracer library',
-        code    : 'SQUID_TRACER_INVALID_CREDENTIALS',
-        detail  : googleCloudCredentials,
-        id      : 0
-      });
-    }
-
     const exporter = new TraceExporter({
-      projectId      : projectId,
+      projectId      : SquidObservabilityConfigs.projectId,
       resourceFilter : /^(service\.name|service\.version|deployment\.environment|host\.name|service\.repository|service\.revision)$/,
-      ...credentials
+      ...SquidObservabilityConfigs.credentials
     });
 
     const provider = new NodeTracerProvider({
       resource : new Resource({
-        [SemanticResourceAttributes.SERVICE_NAME]           : applicationName,
-        [SemanticResourceAttributes.SERVICE_VERSION]        : version,
-        [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT] : environment,
+        [SemanticResourceAttributes.SERVICE_NAME]           : SquidObservabilityConfigs.serviceContext.applicationName,
+        [SemanticResourceAttributes.SERVICE_VERSION]        : SquidObservabilityConfigs.serviceContext.version,
+        [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT] : SquidObservabilityConfigs.serviceContext.environment,
         [SemanticResourceAttributes.HOST_NAME]              : os.hostname(),
-        SERVICE_REPOSITORY                                  : applicationRepository,
-        SERVICE_REVISION                                    : applicationRevisionId
+        SERVICE_REPOSITORY                                  : SquidObservabilityConfigs.sourceReference.repository,
+        SERVICE_REVISION                                    : SquidObservabilityConfigs.sourceReference.revisionId
       })
     });
 
@@ -89,20 +46,23 @@ function Configure (enabled, projectId, googleCloudCredentials, environment, app
 
     registerInstrumentations({
       instrumentations : [
-        getNodeAutoInstrumentations({ '@opentelemetry/instrumentation-mongodb' : { enhancedDatabaseReporting : true } }),
-        new SocketIoInstrumentation({})
+        getNodeAutoInstrumentations({
+          '@opentelemetry/instrumentation-mongodb' : {
+            enhancedDatabaseReporting : true
+          }
+        })
       ],
 
       tracerProvider : provider
     });
 
-    tracerSingleton = OpenTelemetryApi.trace.getTracer(applicationName);
+    global[squidTracerUniqueSymbol] = OpenTelemetryApi.trace.getTracer(SquidObservabilityConfigs.serviceContext.applicationName);
   }
 
-  return tracerSingleton;
+  return global[squidTracerUniqueSymbol];
 };
 
 // maybe expose the tracer singleton object?
-// exports.squidTracer = tracerSingleton;
+// exports.squidTracer = global[squidTracerUniqueSymbol];
 
 exports.Configure = Configure;
