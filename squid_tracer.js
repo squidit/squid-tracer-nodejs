@@ -8,17 +8,13 @@ const { TraceExporter }               = require('@google-cloud/opentelemetry-clo
 const { registerInstrumentations }    = require('@opentelemetry/instrumentation');
 const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
 const { SemanticResourceAttributes }  = require('@opentelemetry/semantic-conventions');
+const SquidObservabilityConfigs       = require('squid-observability-configs');
 
-const squidTracerUniqueSymbol = Symbol.for('squidTracerSingleton');
-const globalSymbols = Object.getOwnPropertySymbols(global);
+const squidTracerUniqueSymbol         = Symbol.for('squidTracerSingleton');
+const globalSymbols                   = Object.getOwnPropertySymbols(global);
 
-const SquidObservabilityConfigs = require('./libraries/squid-observability-configs/squid_observability_configs');
-
-function Configure (enabled)
+function Configure ()
 {
-  if (enabled !== true)
-    return;
-
   const hasSymbol = (globalSymbols.indexOf(squidTracerUniqueSymbol) > -1);
 
   if (!hasSymbol)
