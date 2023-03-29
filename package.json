@@ -19,7 +19,7 @@
     "@opentelemetry/sdk-trace-base": "^1.8.0",
     "@opentelemetry/sdk-trace-node": "^1.8.0",
     "squid-error": "file:libraries/squid-error-nodejs",
-    "squid-observability-configs": "file:libraries/squid-observability-configs"
+    "squid-observability-configs": "file:libraries/squid-observability-configs-nodejs"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
