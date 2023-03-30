@@ -18,7 +18,6 @@
     "@opentelemetry/sdk-metrics-base": "^0.27.0",
     "@opentelemetry/sdk-trace-base": "^1.8.0",
     "@opentelemetry/sdk-trace-node": "^1.8.0",
-    "squid-error": "file:libraries/squid-error-nodejs",
     "squid-observability-configs": "file:libraries/squid-observability-configs-nodejs"
   },
   "devDependencies": {
