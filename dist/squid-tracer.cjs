@@ -37,7 +37,7 @@ var import_instrumentation = require("@opentelemetry/instrumentation");
 var import_resources = require("@opentelemetry/resources");
 var import_sdk_trace_base = require("@opentelemetry/sdk-trace-base");
 var import_sdk_trace_node = require("@opentelemetry/sdk-trace-node");
-var import_semantic_conventions = require("@opentelemetry/semantic-conventions");
+var import_incubating = require("@opentelemetry/semantic-conventions/incubating");
 var import_node_os = __toESM(require("node:os"), 1);
 var import_squid_observability_configs = __toESM(require("squid-observability-configs"), 1);
 const squidTracerUniqueSymbol = /* @__PURE__ */ Symbol.for("squidTracerSingleton");
@@ -46,15 +46,15 @@ function Configure() {
   if (!Reflect.has(globalThis, squidTracerUniqueSymbol)) {
     const exporter = new import_opentelemetry_cloud_trace_exporter.TraceExporter({
       projectId: import_squid_observability_configs.default.projectId,
-      resourceFilter: /^(service\.name|service\.version|deployment\.environment|host\.name|service\.repository|service\.revision)$/,
+      resourceFilter: /^(service\.name|service\.version|deployment\.environment(?:\.name)?|host\.name|service\.repository|service\.revision)$/,
       ...import_squid_observability_configs.default.credentials
     });
     const provider = new import_sdk_trace_node.NodeTracerProvider({
       resource: (0, import_resources.resourceFromAttributes)({
-        [import_semantic_conventions.SemanticResourceAttributes.SERVICE_NAME]: import_squid_observability_configs.default.serviceContext.applicationName,
-        [import_semantic_conventions.SemanticResourceAttributes.SERVICE_VERSION]: import_squid_observability_configs.default.serviceContext.version,
-        [import_semantic_conventions.SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]: import_squid_observability_configs.default.serviceContext.environment,
-        [import_semantic_conventions.SemanticResourceAttributes.HOST_NAME]: import_node_os.default.hostname(),
+        [import_incubating.ATTR_SERVICE_NAME]: import_squid_observability_configs.default.serviceContext.applicationName,
+        [import_incubating.ATTR_SERVICE_VERSION]: import_squid_observability_configs.default.serviceContext.version,
+        [import_incubating.ATTR_DEPLOYMENT_ENVIRONMENT_NAME]: import_squid_observability_configs.default.serviceContext.environment,
+        [import_incubating.ATTR_HOST_NAME]: import_node_os.default.hostname(),
         SERVICE_REPOSITORY: import_squid_observability_configs.default.sourceReference.repository,
         SERVICE_REVISION: import_squid_observability_configs.default.sourceReference.revisionId
       }),
