@@ -1,0 +1,15 @@
+{
+  "include": ["squid-tracer.ts", "tsup.config.ts", "squid-observability-configs.d.ts"],
+  "exclude": ["dist", "node_modules"],
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "noEmit": true,
+    "skipLibCheck": true,
+    "target": "es2022",
+    "types": ["node"],
+    "verbatimModuleSyntax": true
+  }
+}
