@@ -1,5 +1,5 @@
 {
-  "include": ["squid-tracer.ts", "tsup.config.ts", "squid-observability-configs.d.ts"],
+  "include": ["squid-tracer.ts", "tsup.config.ts"],
   "exclude": ["dist", "node_modules"],
   "compilerOptions": {
     "declaration": true,
