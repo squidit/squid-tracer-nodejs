@@ -35,8 +35,10 @@
     "@opentelemetry/resources": "^2.6.0",
     "@opentelemetry/sdk-trace-base": "^2.6.0",
     "@opentelemetry/sdk-trace-node": "^2.6.0",
-    "@opentelemetry/semantic-conventions": "^1.40.0",
-    "squid-observability-configs": "file:libraries/squid-observability-configs-nodejs"
+    "@opentelemetry/semantic-conventions": "^1.40.0"
+  },
+  "peerDependencies": {
+    "squid-observability-configs": "^2.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
